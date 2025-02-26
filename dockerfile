@@ -12,4 +12,4 @@ RUN poetry install
 
 EXPOSE 8080
 
-CMD ["poetry", "run", "flask", "--app", "./server/main.py", "run", "--host=0.0.0.0"]
+CMD ["poetry", "run", "python", "main.py"]

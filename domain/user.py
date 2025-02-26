@@ -2,8 +2,7 @@ from sqlalchemy import Column, String, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
-from server.settings import Base, ENGINE
-
+from settings import Base
 
 class User(Base):
     """
@@ -21,7 +20,3 @@ class User(Base):
     password = Column('password', String(100))
     created_at = Column('created_at', DateTime)
     updated_at = Column('updated_at', DateTime)
-
-
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=ENGINE)
