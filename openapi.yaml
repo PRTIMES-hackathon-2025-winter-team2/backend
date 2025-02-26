@@ -192,7 +192,7 @@ paths:
     get:
       tags:
         - tree
-      summary: 全ユーザが作成したすべてのツリーのリストを取得する
+      summary: すべてのユーザが作成したすべてのツリーのリストを取得する
       responses:
         200:
           description: List of all trees retrieved successfully
