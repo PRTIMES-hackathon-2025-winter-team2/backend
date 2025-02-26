@@ -7,16 +7,16 @@ tags:
     description: User authentication
   - name: tree
     description: User tree management
-  - name: share
-    description: Dream sharing and SNS integration
   - name: user
     description: User profile management
+  - name: follow
+    description: User follow management
 paths:
   /auth/register:
     post:
       tags:
         - auth
-      summary: 新しいユーザーアカウントを登録する
+      summary: 新しいユーザアカウントを登録する
       requestBody:
         required: true
         content:
@@ -38,7 +38,7 @@ paths:
     post:
       tags:
         - auth
-      summary: ユーザーを認証してログインする
+      summary: ユーザを認証してログインする
       requestBody:
         required: true
         content:
@@ -58,7 +58,7 @@ paths:
     post:
       tags:
         - auth
-      summary: ユーザーのメールにパスワードリセットリンクを送信する
+      summary: ユーザのメールにパスワードリセットリンクを送信する
       requestBody:
         required: true
         content:
@@ -76,7 +76,7 @@ paths:
     get:
       tags:
         - tree
-      summary: ユーザーが作成したツリーのリストを取得する
+      summary: ユーザが作成したツリーのリストを取得する
       parameters:
         - name: user_id
           in: path
@@ -89,7 +89,13 @@ paths:
     post:
       tags:
         - tree
-      summary: ユーザーのために新しいツリーを作成する
+      summary: ユーザが新しいツリーを作成する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -97,20 +103,35 @@ paths:
             schema:
               type: object
               properties:
-                title:
-                  type: string
-                description:
-                  type: string
+                dreams:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: string
+                      title:
+                        type: string
+                      tree_id:
+                        type: integer
+                      created_at:
+                        type: string
+                      ended_at:
+                        type: string
       responses:
         201:
           description: New tree created successfully
   
-  /trees/{id}:
+  /trees/{user_id}/{id}:
     get:
       tags:
         - tree
-      summary: 特定のツリーの詳細を取得する
+      summary: ユーザが作成した特定のツリーの詳細を取得する
       parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
         - name: id
           in: path
           required: true
@@ -122,8 +143,13 @@ paths:
     patch:
       tags:
         - tree
-      summary: ツリーのステータスを更新する
+      summary: ユーザが作成したツリーのステータスを更新する
       parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
         - name: id
           in: path
           required: true
@@ -136,7 +162,7 @@ paths:
             schema:
               type: object
               properties:
-                status:
+                ended_at:
                   type: string
       responses:
         200:
@@ -144,8 +170,13 @@ paths:
     delete:
       tags:
         - tree
-      summary: 特定のツリーを削除する
+      summary: ユーザが作成した特定のツリーを削除する
       parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
         - name: id
           in: path
           required: true
@@ -159,37 +190,16 @@ paths:
     get:
       tags:
         - tree
-      summary: ユーザーが作成したすべてのツリーのリストを取得する
+      summary: 全ユーザが作成したすべてのツリーのリストを取得する
       responses:
         200:
           description: List of all trees retrieved successfully
 
-  /share:
-    post:
-      tags:
-        - share
-      summary: 夢をソーシャルメディアで共有する
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                dreamId:
-                  type: string
-                event:
-                  type: string
-                  enum: [created, achieved]
-      responses:
-        200:
-          description: Dream shared successfully
-  
-  /profiles/{id}:
+  /users/{id}:
     get:
       tags:
         - user
-      summary: ユーザープロフィールの詳細を取得する
+      summary: ユーザプロフィールの詳細を取得する
       parameters:
         - name: id
           in: path
@@ -202,7 +212,7 @@ paths:
     patch:
       tags:
         - user
-      summary: ユーザープロフィール情報を更新する
+      summary: ユーザプロフィール情報を更新する
       parameters:
         - name: id
           in: path
@@ -216,19 +226,90 @@ paths:
             schema:
               type: object
               properties:
-                age:
-                  type: integer
-                profession:
+                email:
+                  type: string
+                name:
                   type: string
       responses:
         200:
           description: User profile updated successfully
   
-  /profiles:
+  /users:
     get:
       tags:
         - user
-      summary: すべてのユーザープロフィールのリストを取得する
+      summary: すべてのユーザプロフィールのリストを取得する
       responses:
         200:
           description: List of all user profiles retrieved successfully
+  
+  
+  /follow:
+    post:
+      tags:
+        - follow
+      summary: ユーザをフォローする
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from_user_id:
+                  type: string
+                to_user_id:
+                  type: string
+      responses:
+        201:
+          description: Follow created successfully
+
+  /unfollow:
+    post:
+      tags:
+        - follow
+      summary: ユーザのフォローを解除する
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from_user_id:
+                  type: string
+                to_user_id:
+                  type: string
+      responses:
+        200:
+          description: Unfollowed successfully
+
+  /followers/{user_id}:
+    get:
+      tags:
+        - follow
+      summary: ユーザのことをフォローしているユーザのリストを取得する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of followers retrieved successfully
+
+  /following/{user_id}:
+    get:
+      tags:
+        - follow
+      summary: ユーザがフォローしているユーザのリストを取得する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of following retrieved successfully
