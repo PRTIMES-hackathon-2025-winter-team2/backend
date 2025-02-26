@@ -1,6 +1,10 @@
-from sqlalchemy import Column, String, DateTime, ForeignKey
+from datetime import datetime
+from sqlalchemy import String, DateTime, ForeignKey
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.dialects.postgresql import UUID
+from domain.dream import Dream
 import uuid
+from typing import Optional
 
 from settings import Base
 
@@ -15,8 +19,10 @@ class Tree(Base):
         'comment': 'ツリー情報のマスターテーブル'
     }
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    title = Column('title', String(200))
-    user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
-    created_at = Column('created_at', DateTime)
-    ended_at = Column('ended_at', DateTime)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title: Mapped[str] = mapped_column(String(200))
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey('users.id'))
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+    ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+
+    dreams: Mapped[list[Dream]] = relationship('Dream', backref='tree')
