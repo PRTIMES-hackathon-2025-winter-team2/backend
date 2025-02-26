@@ -1,4 +1,4 @@
-from sqlalchemy import Column
+from sqlalchemy.orm import mapped_column, Mapped
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -15,5 +15,5 @@ class Follow(Base):
         'comment': 'フォロー情報のマスターテーブル'
     }
 
-    from_user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    to_user_id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    from_user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    to_user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
