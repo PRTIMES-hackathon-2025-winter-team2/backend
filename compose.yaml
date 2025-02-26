@@ -2,13 +2,14 @@ services:
   database:
     image: postgres:17.4
     environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
       POSTGRES_DB: database
+      POSTGRES_PORT: 5432
     ports:
       - "5432:5432"
     volumes:
-      - ./database:/var/lib/postgresql/data
+      - database:/var/lib/postgresql/data
 
   server:
     build:
@@ -18,3 +19,6 @@ services:
       - "5000:5000"
     depends_on:
       - database
+
+volumes:
+  database:

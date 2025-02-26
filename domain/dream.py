@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, DateTime, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
-from server.settings import Base, ENGINE
+from settings import Base
 
 
 class Dream(Base):
@@ -20,7 +20,3 @@ class Dream(Base):
     tree_id = Column(UUID(as_uuid=True), ForeignKey('trees.id'))
     created_at = Column('created_at', DateTime)
     ended_at = Column('ended_at', DateTime)
-
-
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=ENGINE)
