@@ -11,6 +11,21 @@ tags:
     description: User profile management
   - name: follow
     description: User follow management
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWTトークン
+
 paths:
   /auth/register:
     post:
@@ -33,7 +48,11 @@ paths:
       responses:
         201:
           description: User registered successfully
-  
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
   /auth/login:
     post:
       tags:
@@ -53,7 +72,11 @@ paths:
       responses:
         200:
           description: User logged in successfully
-  
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
   /auth/reset-password:
     post:
       tags:
@@ -71,7 +94,7 @@ paths:
       responses:
         200:
           description: Password reset link sent successfully
-  
+
   /trees/{user_id}:
     get:
       tags:
@@ -86,7 +109,25 @@ paths:
       responses:
         200:
           description: List of user's trees retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    created_at:
+                      type: string
+                    ended_at:
+                      type: string
+
     post:
+      security:
+        - bearerAuth: []
       tags:
         - tree
       summary: ユーザが新しいツリーを作成する
@@ -103,16 +144,20 @@ paths:
             schema:
               type: object
               properties:
+                title:
+                  type: string
                 dreams:
                   type: array
                   items:
                     properties:
                       id:
                         type: string
+                      tree_id:
+                        type: string
+                      position:
+                        type: integer
                       title:
                         type: string
-                      tree_id:
-                        type: integer
                       created_at:
                         type: string
                       ended_at:
@@ -120,7 +165,7 @@ paths:
       responses:
         201:
           description: New tree created successfully
-  
+
   /trees/{user_id}/{id}:
     get:
       tags:
@@ -140,7 +185,39 @@ paths:
       responses:
         200:
           description: Tree details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  created_at:
+                    type: string
+                  ended_at:
+                    type: string
+                  dreams:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                        tree_id:
+                          type: string
+                        position:
+                          type: integer
+                        title:
+                          type: string
+                        created_at:
+                          type: string
+                        ended_at:
+                          type: string
+
     patch:
+      security:
+        - bearerAuth: []
       tags:
         - tree
       summary: ユーザが作成したツリーのステータスを更新する
@@ -162,12 +239,30 @@ paths:
             schema:
               type: object
               properties:
-                ended_at:
+                title:
                   type: string
+                dreams:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: string
+                      tree_id:
+                        type: string
+                      position:
+                        type: integer
+                      title:
+                        type: string
+                      created_at:
+                        type: string
+                      ended_at:
+                        type: string
       responses:
         200:
           description: Tree status updated successfully
     delete:
+      security:
+        - bearerAuth: []
       tags:
         - tree
       summary: ユーザが作成した特定のツリーを削除する
@@ -185,7 +280,7 @@ paths:
       responses:
         200:
           description: Tree deleted successfully
-  
+
   /trees:
     get:
       tags:
@@ -194,6 +289,23 @@ paths:
       responses:
         200:
           description: List of all trees retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    username:
+                      type: string
+                    title:
+                      type: string
+                    created_at:
+                      type: string
+                    ended_at:
+                      type: string
 
   /users/{id}:
     get:
@@ -209,7 +321,18 @@ paths:
       responses:
         200:
           description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
     patch:
+      security:
+        - bearerAuth: []
       tags:
         - user
       summary: ユーザプロフィール情報を更新する
@@ -233,7 +356,7 @@ paths:
       responses:
         200:
           description: User profile updated successfully
-  
+
   /users:
     get:
       tags:
@@ -242,10 +365,11 @@ paths:
       responses:
         200:
           description: List of all user profiles retrieved successfully
-  
-  
+
   /follow:
     post:
+      security:
+        - bearerAuth: []
       tags:
         - follow
       summary: ユーザをフォローする
@@ -266,6 +390,8 @@ paths:
 
   /unfollow:
     post:
+      security:
+        - bearerAuth: []
       tags:
         - follow
       summary: ユーザのフォローを解除する
@@ -286,6 +412,8 @@ paths:
 
   /followers/{user_id}:
     get:
+      security:
+        - bearerAuth: []
       tags:
         - follow
       summary: ユーザのことをフォローしているユーザのリストを取得する
@@ -298,9 +426,22 @@ paths:
       responses:
         200:
           description: List of followers retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
 
   /following/{user_id}:
     get:
+      security:
+        - bearerAuth: []
       tags:
         - follow
       summary: ユーザがフォローしているユーザのリストを取得する
@@ -313,3 +454,14 @@ paths:
       responses:
         200:
           description: List of following retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
