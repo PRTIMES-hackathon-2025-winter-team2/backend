@@ -16,6 +16,7 @@ class Tree(Base):
     }
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    title = Column('title', String(200))
     user_id = Column(UUID(as_uuid=True), ForeignKey('users.id'))
     created_at = Column('created_at', DateTime)
     ended_at = Column('ended_at', DateTime)
