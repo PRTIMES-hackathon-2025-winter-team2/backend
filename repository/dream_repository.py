@@ -19,3 +19,10 @@ class DreamRepository:
         self.session.add(dream)
         self.session.commit()
         return dream
+
+    def update_ended_at(self, dream_id: str):
+        dream = self.session.query(Dream).filter(Dream.id == dream_id).first()
+        if not dream:
+            raise Exception(f"指定されたIDのDreamが存在しません: {dream_id}")
+        dream.ended_at = datetime.now()
+        self.session.commit()
