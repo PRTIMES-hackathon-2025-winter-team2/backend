@@ -13,7 +13,24 @@ git rebase origin/main
 
 また、PR ではテンプレートを作成したので、それを埋める形で情報を記述して、お互いにレビューし合うことにします。
 
-### 起動の仕方
+### モックサーバーの起動の仕方
+
+```shell
+cd mock
+docker compose up --build
+```
+
+openapi.yaml に書いてある
+
+```yaml
+servers: # base endpoint
+  - url: http://localhost:5000/api/v1
+    description: base endpoint.
+```
+
+の部分は反映されないっぽいので、http://localhost:5000/ から各 API にアクセスしてください。
+
+### サーバーの起動の仕方
 
 ```shell
 docker compose up -d --build
