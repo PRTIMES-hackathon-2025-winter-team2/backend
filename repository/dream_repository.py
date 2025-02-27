@@ -1,7 +1,9 @@
-from typing import Optional
-from sqlalchemy.orm import scoped_session
-from domain.dream import Dream
 from datetime import datetime
+
+from sqlalchemy.orm import scoped_session
+
+from domain.dream import Dream
+
 
 class DreamRepository:
     def __init__(self, session: scoped_session):
