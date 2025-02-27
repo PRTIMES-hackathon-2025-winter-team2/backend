@@ -15,7 +15,9 @@ from flask_jwt_extended import JWTManager
 """
 
 app = flask.Flask(__name__)
-CORS(app)
+
+CORS(app, resources={'*': {'origins': 'http://localhost:3000'}}, supports_credentials=True)
+
 app.config['JSON_SORT_KEYS'] = False
 app.config['JSON_AS_ASCII'] = False
 app.config['ENABLE_AUTH'] = True

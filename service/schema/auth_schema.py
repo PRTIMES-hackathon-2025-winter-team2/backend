@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field, EmailStr
 
 class UserRegisterSchema(BaseModel):
     """ユーザー登録のリクエストスキーマ"""
-    name: str = Field(..., min_length=1, max_length=200, description="ユーザー名")
+    username: str = Field(..., min_length=1, max_length=200, description="ユーザー名")
     email: EmailStr = Field(..., description="メールアドレス")
     password: str = Field(..., min_length=8, max_length=100, description="パスワード")
 

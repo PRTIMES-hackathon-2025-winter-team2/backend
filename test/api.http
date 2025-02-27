@@ -11,7 +11,7 @@ Content-Type: {{contentType}}
 {
     "email": "test@example.com",
     "password": "password123",
-    "name": "testuser"
+    "username": "testuser"
 }
 
 ### ユーザIDを環境変数として保存
@@ -90,6 +90,11 @@ DELETE {{baseUrl}}/users/{{userId}}/trees/{{treeId}}
 Authorization: Bearer {{authToken}}
 Content-Type: {{contentType}}
 
+### 夢の完了を記録
+PATCH {{baseUrl}}/users/{{userId}}/trees/{{treeId}}/dreams/210bd18a-e4c1-48d0-9a07-ba3fe1a3b596
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
 ### ユーザプロフィールの更新
 PATCH {{baseUrl}}/users/{{userId}}
 Authorization: Bearer {{authToken}}
@@ -140,3 +145,5 @@ Content-Type: {{contentType}}
 GET {{baseUrl}}/follow/{{userId}}/following
 Authorization: Bearer {{authToken}}
 Content-Type: {{contentType}}
+
+
