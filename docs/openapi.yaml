@@ -31,12 +31,12 @@ components:
         token:
           type: string
           description: JWTトークン
-        id:
+        user_id:
           type: string
           description: ユーザID
       example:
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IuWxseeUsOWkqumDjiJ9"
-        id: "123e4567-e89b-12d3-a456-426614174000"
+        user_id: "123e4567-e89b-12d3-a456-426614174000"
 
 paths:
   /auth/register:
@@ -51,15 +51,15 @@ paths:
             schema:
               type: object
               properties:
+                username:
+                  type: string
+                  example: "山田太郎"
                 email:
                   type: string
                   example: "user@example.com"
                 password:
                   type: string
                   example: "password123"
-                username:
-                  type: string
-                  example: "山田太郎"
       responses:
         201:
           description: User registered successfully
@@ -131,8 +131,10 @@ paths:
                 properties:
                   id:
                     type: string
+                    example: 2539df44-a215-4979-827c-7312e99391fa
                   name:
                     type: string
+                    example: testuser
     patch:
       security:
         - bearerAuth: []
@@ -154,11 +156,24 @@ paths:
               properties:
                 email:
                   type: string
+                  example: updated@example.com
                 name:
                   type: string
+                  example: updateduser
       responses:
         200:
           description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: updated@example.com
+                  name:
+                    type: string
+                    example: updateuser
 
   /trees:
     get:
@@ -175,7 +190,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    tree_id:
+                    id:
                       type: string
                       example: "123e4567-e89b-12d3-a456-426614174000"
                     user_id:
@@ -185,12 +200,13 @@ paths:
                       type: string
                       example: "プログラミングの夢"
                 example:
-                  - tree_id: "123e4567-e89b-12d3-a456-426614174000"
-                    user_id: "123e4567-e89b-12d3-a456-426614174000"
+                  - id: "123e4567-e89b-12d3-a456-426614174000"
                     title: "プログラミングの夢"
-                  - tree_id: "987fcdeb-54ba-4321-8765-098765432100"
-                    user_id: "987fcdeb-54ba-4321-8765-098765432100"
+                    user_id: "123e4567-e89b-12d3-a456-426614174000"
+                  - id: "987fcdeb-54ba-4321-8765-098765432100"
                     title: "起業への道"
+                    user_id: "987fcdeb-54ba-4321-8765-098765432100"
+                    
 
   /users/{user_id}/trees:
     get:
@@ -216,14 +232,14 @@ paths:
                     id:
                       type: string
                       example: "123e4567-e89b-12d3-a456-426614174000"
-                    name:
+                    title:
                       type: string
                       example: "プログラミングの夢"
                 example:
                   - id: "123e4567-e89b-12d3-a456-426614174000"
-                    name: "プログラミングの夢"
+                    title: "プログラミングの夢"
                   - id: "987fcdeb-54ba-4321-8765-098765432100"
-                    name: "起業への道"
+                    title: "起業への道"
     post:
       security:
         - bearerAuth: []
@@ -292,32 +308,27 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: string
-                    example: "123e4567-e89b-12d3-a456-426614174000"
-                  title:
-                    type: string
-                    example: "プログラミングの夢"
                   dreams:
                     type: array
                     items:
                       type: object
                       properties:
-                        id:
-                          type: string
-                          example: "456e7890-12cd-34ef-a456-426614174000"
-                        title:
-                          type: string
-                          example: "Webアプリケーションを作る"
-                        position:
-                          type: integer
-                          example: 1
                         created_at:
                           type: string
                           example: "2024-01-01T00:00:00Z"
                         ended_at:
                           type: string
                           example: "2024-12-31T23:59:59Z"
+                        id:
+                          type: string
+                          example: "456e7890-12cd-34ef-a456-426614174000"
+                        position:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: "Webアプリケーションを作る"
+
     patch:
       security:
         - bearerAuth: []
@@ -349,12 +360,24 @@ paths:
       responses:
         200:
           description: Tree updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: eddef7ec-6392-4161-b361-1c555332107a
+                  title:
+                    type: string
+                    example: Updated Programming Dream
+            
     delete:
       security:
         - bearerAuth: []
       tags:
         - tree
-      summary: ユーザの木を削除する
+      summary: ユーザの木を削除する（未実装）
       parameters:
         - name: user_id
           in: path
@@ -374,7 +397,7 @@ paths:
     get:
       tags:
         - dreams
-      summary: ユーザの木のすべての夢のリストを取得する
+      summary: ユーザの木のすべての夢のリストを取得する（未実装?）
       parameters:
         - name: user_id
           in: path
@@ -427,7 +450,7 @@ paths:
         - bearerAuth: []
       tags:
         - dreams
-      summary: ユーザの新しい夢を作成する
+      summary: ユーザの新しい夢を作成する（未実装?）
       parameters:
         - name: user_id
           in: path
@@ -477,22 +500,6 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "新しい夢のタイトル"
-                position:
-                  type: integer
-                  example: 3
-                ended_at:
-                  type: string
-                  example: "2024-12-31T23:59:59Z"
       responses:
         200:
           description: Dream updated successfully
@@ -501,21 +508,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
+                  message:
                     type: string
-                    example: "456e7890-12cd-34ef-a456-426614174000"
-                  title:
-                    type: string
-                    example: "新しい夢のタイトル"
-                  position:
-                    type: integer
-                    example: 3
-                  created_at:
-                    type: string
-                    example: "2024-01-01T00:00:00Z"
-                  ended_at:
-                    type: string
-                    example: "2024-12-31T23:59:59Z"
+                    example: "success"
 
   /users:
     get:
@@ -532,43 +527,77 @@ paths:
                 items:
                   type: object
                   properties:
+                    email:
+                      type: string
+                      example: "yamada@example.com"
                     id:
                       type: string
                       example: "123e4567-e89b-12d3-a456-426614174000"
                     name:
                       type: string
                       example: "山田太郎"
-                    email:
-                      type: string
-                      example: "yamada@example.com"
                 example:
-                  - id: "123e4567-e89b-12d3-a456-426614174000"
+                  - email: "yamada@example.com"
+                    id: "123e4567-e89b-12d3-a456-426614174000"
                     name: "山田太郎"
-                    email: "yamada@example.com"
-                  - id: "987fcdeb-54ba-4321-8765-098765432100"
+                  - email: "suzuki@example.com"
+                    id: "987fcdeb-54ba-4321-8765-098765432100"
                     name: "鈴木花子"
-                    email: "suzuki@example.com"
 
-  /follow/<user_id>:
+  /follow/{user_id}:
     post:
       security:
         - bearerAuth: []
       tags:
         - follow
       summary: ユーザをフォローする
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         201:
           description: Follow created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from_user_id:
+                    type: string
+                    example: eddef7ec-6392-4161-b361-1c555332107a
+                  to_user_id:
+                    type: string
+                    example: 123e4567-e89b-12d3-a456-426614174000
     delete:
       security:
         - bearerAuth: []
       tags:
         - follow
       summary: ユーザのフォローを解除する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Follow deleted successfully
-
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from_user_id:
+                    type: string
+                    example: eddef7ec-6392-4161-b361-1c555332107a
+                  to_user_id:
+                    type: string
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                    
   /follow/{user_id}/followers:
     get:
       tags:
