@@ -16,7 +16,7 @@ def get_all_users():
     if not response:
         return jsonify({"error": "User not found"}), 404
     
-    users_data = [user.to_dict() for user in response]
+    users_data = [{"id": user.id, "name": user.name, "email": user.email} for user in response]
     return jsonify(users_data)
 
 @user.route('/<string:id>', methods=['GET'])
@@ -25,7 +25,11 @@ def get_users(id):
     if not response:
         return jsonify({"error": "User not found"}), 404
     
-    return jsonify(response.to_dict())
+    user_data = {
+        "id": response.id,
+        "name": response.name
+    }
+    return jsonify(user_data)
 
 @user.route('/<string:id>', methods=['PATCH'])
 @validate()
@@ -34,10 +38,13 @@ def patch_users(id, body: UserUpdateSchema):
     if not user:
         return jsonify({"error": "User not found"}), 404
 
+    user_data = {}
     if body.name:
         user.name = body.name
+        user_data["name"] = user.name 
     if body.email:
         user.email = body.email
+        user_data["email"] = user.email
 
     user_repository.session.commit()
-    return jsonify(user.to_dict())
+    return jsonify(user_data)
