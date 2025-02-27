@@ -1,6 +1,8 @@
 @baseUrl = http://localhost:5000
 @contentType = application/json
 
+@followId = 4ba10488-13b6-407e-b950-2e35b9b07cd1
+
 ### ユーザー登録
 # @name register
 POST {{baseUrl}}/auth/register
@@ -102,3 +104,38 @@ GET {{baseUrl}}/users
 Authorization: Bearer {{authToken}}
 Content-Type: {{contentType}}
 
+
+### フォロー用のユーザー登録
+# @name follow-register
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+    "email": "follow@example.com",
+    "password": "follow123",
+    "name": "followuser"
+}
+
+
+### ユーザをフォロー
+POST {{baseUrl}}/follow/{{followId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+
+### ユーザのフォローを解除
+DELETE  {{baseUrl}}/follow/{{followId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+
+### ユーザのことをフォローしているユーザのリストを取得する
+GET {{baseUrl}}/follow/{{userId}}/followers
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+
+### ユーザがフォローしているユーザのリストを取得する
+GET {{baseUrl}}/follow/{{userId}}/following
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
