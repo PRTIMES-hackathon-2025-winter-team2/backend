@@ -2,7 +2,7 @@ from datetime import datetime
 from domain.user import User
 from repository.user_repository import UserRepository
 from service.schema.auth_schema import UserRegisterSchema, UserLoginSchema, TokenResponseSchema
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, decode_token
 
 class AuthService:
     def __init__(self, user_repository: UserRepository, secret_key: str):
@@ -33,6 +33,10 @@ class AuthService:
             token=create_access_token(identity=str(user.id)),
             user_id=str(user.id),
         )
+    
+    def decode_token(token: str) -> str:
+        decoded_token = decode_token(token)
+        return decoded_token['sub']
 
     def reset_password(self):
         # サービスのコアロジックではないので一旦、未実装
