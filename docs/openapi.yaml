@@ -382,7 +382,7 @@ paths:
     get:
       tags:
         - dreams
-      summary: ユーザの木のすべての夢のリストを取得する
+      summary: ユーザの木のすべての夢のリストを取得する（未実装?）
       parameters:
         - name: user_id
           in: path
@@ -435,7 +435,7 @@ paths:
         - bearerAuth: []
       tags:
         - dreams
-      summary: ユーザの新しい夢を作成する
+      summary: ユーザの新しい夢を作成する（未実装?）
       parameters:
         - name: user_id
           in: path
@@ -485,22 +485,6 @@ paths:
           required: true
           schema:
             type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "新しい夢のタイトル"
-                position:
-                  type: integer
-                  example: 3
-                ended_at:
-                  type: string
-                  example: "2024-12-31T23:59:59Z"
       responses:
         200:
           description: Dream updated successfully
@@ -509,21 +493,9 @@ paths:
               schema:
                 type: object
                 properties:
-                  id:
+                  message:
                     type: string
-                    example: "456e7890-12cd-34ef-a456-426614174000"
-                  title:
-                    type: string
-                    example: "新しい夢のタイトル"
-                  position:
-                    type: integer
-                    example: 3
-                  created_at:
-                    type: string
-                    example: "2024-01-01T00:00:00Z"
-                  ended_at:
-                    type: string
-                    example: "2024-12-31T23:59:59Z"
+                    example: "success"
 
   /users:
     get:
