@@ -1,7 +1,5 @@
-from flask import blueprints, request, jsonify
+from flask import blueprints, jsonify
 from flask_pydantic import validate
-from service.schema.auth_schema import UserRegisterSchema, UserLoginSchema, TokenResponseSchema
-from service.auth_service import AuthService
 from repository.user_repository import UserRepository
 from settings import get_db_session
 from service.schema.user_schema import UserUpdateSchema

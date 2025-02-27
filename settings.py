@@ -60,8 +60,8 @@ session = scoped_session(
 Base = declarative_base()
 Base.query = session.query_property()
 
-def get_db_session():
-    return session()
+def get_db_session() -> scoped_session:
+    return session() # type: ignore
 
 def get_db_engine():
     return engine

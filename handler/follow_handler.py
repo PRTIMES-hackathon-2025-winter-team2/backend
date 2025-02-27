@@ -1,7 +1,6 @@
 from flask import blueprints, request, jsonify
 from service.auth_service import AuthService
 from service.follow_service import FollowService
-from repository.user_repository import UserRepository
 from repository.follow_repository import FollowRepository
 from settings import get_db_session
 
