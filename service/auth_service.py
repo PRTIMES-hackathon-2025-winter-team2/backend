@@ -11,7 +11,7 @@ class AuthService:
 
     def register(self, user: UserRegisterSchema) -> TokenResponseSchema:
         user = User(
-            name=user.name,
+            name=user.username,
             email=user.email,
             password=user.password,
             created_at=datetime.now(),
@@ -33,7 +33,7 @@ class AuthService:
             token=create_access_token(identity=str(user.id)),
             user_id=str(user.id),
         )
-    
+
     def decode_token(token: str) -> str:
         decoded_token = decode_token(token)
         return decoded_token['sub']
