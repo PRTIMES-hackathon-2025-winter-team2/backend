@@ -1,12 +1,13 @@
 from flask import blueprints, jsonify
-from flask_pydantic import validate
-from repository.tree_repository import TreeRepository
-from repository.dream_repository import DreamRepository
-from service.tree_service import TreeService
-from settings import get_db_session
-from service.schema.tree_schema import PostTreeRequestSchema, PatchTreeRequestSchema
-from settings import app
 from flask_jwt_extended import get_jwt_identity, jwt_required
+from flask_pydantic import validate
+
+from repository.dream_repository import DreamRepository
+from repository.tree_repository import TreeRepository
+from service.schema.tree_schema import (PatchTreeRequestSchema,
+                                        PostTreeRequestSchema)
+from service.tree_service import TreeService
+from settings import app, get_db_session
 
 user_tree_blueprint = blueprints.Blueprint(
     "user_tree", __name__, url_prefix="/users/<string:user_id>/trees"

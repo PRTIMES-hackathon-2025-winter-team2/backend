@@ -1,10 +1,11 @@
 from flask import blueprints, jsonify
-from flask_pydantic import validate
-from service.schema.auth_schema import UserRegisterSchema, UserLoginSchema
-from service.auth_service import AuthService
-from repository.user_repository import UserRepository
-from settings import get_db_session
 from flask_jwt_extended import set_access_cookies
+from flask_pydantic import validate
+
+from repository.user_repository import UserRepository
+from service.auth_service import AuthService
+from service.schema.auth_schema import UserLoginSchema, UserRegisterSchema
+from settings import get_db_session
 
 auth_blueprint = blueprints.Blueprint("auth", __name__, url_prefix="/auth")
 user_repository = UserRepository(get_db_session())

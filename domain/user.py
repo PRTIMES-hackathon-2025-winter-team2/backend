@@ -1,10 +1,11 @@
-from datetime import datetime
-from sqlalchemy import String, DateTime
-from sqlalchemy.orm import mapped_column, Mapped, relationship
-from sqlalchemy.dialects.postgresql import UUID
-from domain.tree import Tree
 import uuid
+from datetime import datetime
 
+from sqlalchemy import DateTime, String
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from domain.tree import Tree
 from settings import Base
 
 

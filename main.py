@@ -1,11 +1,10 @@
-from settings import app
 from domain.tables import create_tables
 from handler.auth_handler import auth_blueprint
-from handler.user_handler import user_blueprint
-from handler.tree_handler import user_tree_blueprint, tree_blueprint
-from handler.follow_handler import follow_blueprint
 from handler.dream_handler import user_tree_dream_blueprint
-
+from handler.follow_handler import follow_blueprint
+from handler.tree_handler import tree_blueprint, user_tree_blueprint
+from handler.user_handler import user_blueprint
+from settings import app
 
 if __name__ == "__main__":
     create_tables()

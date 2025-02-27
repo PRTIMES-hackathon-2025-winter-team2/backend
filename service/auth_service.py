@@ -1,12 +1,11 @@
 from datetime import datetime
+
+from flask_jwt_extended import create_access_token, decode_token
+
 from domain.user import User
 from repository.user_repository import UserRepository
-from service.schema.auth_schema import (
-    UserRegisterSchema,
-    UserLoginSchema,
-    TokenResponseSchema,
-)
-from flask_jwt_extended import create_access_token, decode_token
+from service.schema.auth_schema import (TokenResponseSchema, UserLoginSchema,
+                                        UserRegisterSchema)
 
 
 class AuthService:

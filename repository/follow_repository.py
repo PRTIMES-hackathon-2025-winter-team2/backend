@@ -1,7 +1,9 @@
 from typing import Optional
+
 from sqlalchemy.orm import scoped_session
-from domain.user import User
+
 from domain.follow import Follow
+from domain.user import User
 
 
 class FollowRepository:

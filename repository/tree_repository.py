@@ -1,7 +1,9 @@
-from typing import Optional
-from sqlalchemy.orm import scoped_session
-from domain.tree import Tree
 from datetime import datetime
+from typing import Optional
+
+from sqlalchemy.orm import scoped_session
+
+from domain.tree import Tree
 
 
 class TreeRepository:

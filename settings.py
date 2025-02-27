@@ -1,14 +1,13 @@
 import os
+from datetime import timedelta
 
 import flask
 from dotenv import load_dotenv
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager
 from sqlalchemy.engine.create import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-from datetime import timedelta
-from flask_jwt_extended import JWTManager
-
 
 """
 サーバーの設定

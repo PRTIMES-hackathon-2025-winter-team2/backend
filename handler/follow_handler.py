@@ -1,7 +1,8 @@
-from flask import blueprints, request, jsonify
+from flask import blueprints, jsonify, request
+
+from repository.follow_repository import FollowRepository
 from service.auth_service import AuthService
 from service.follow_service import FollowService
-from repository.follow_repository import FollowRepository
 from settings import get_db_session
 
 follow_blueprint = blueprints.Blueprint("follow", __name__, url_prefix="/follow")

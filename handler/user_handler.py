@@ -1,9 +1,10 @@
 from flask import blueprints, jsonify
 from flask_pydantic import validate
+
 from repository.user_repository import UserRepository
-from settings import get_db_session
 from service.schema.user_schema import UserUpdateSchema
 from service.user_service import UserService
+from settings import get_db_session
 
 user_blueprint = blueprints.Blueprint("user", __name__, url_prefix="/users")
 user_repository = UserRepository(get_db_session())

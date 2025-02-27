@@ -1,7 +1,9 @@
 from typing import Optional
-from sqlalchemy.orm import scoped_session
-from domain.user import User
+
 import bcrypt
+from sqlalchemy.orm import scoped_session
+
+from domain.user import User
 from settings import app
 
 

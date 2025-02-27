@@ -1,7 +1,7 @@
-from domain.user import User  # noqa
-from domain.tree import Tree  # noqa
-from domain.follow import Follow  # noqa
 from domain.dream import Dream  # noqa
+from domain.follow import Follow  # noqa
+from domain.tree import Tree  # noqa
+from domain.user import User  # noqa
 from settings import Base, get_db_engine
 
 
