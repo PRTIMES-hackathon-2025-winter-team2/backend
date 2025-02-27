@@ -25,3 +25,25 @@ def get_users(id):
     }
 
     return jsonify(user_data)
+
+@user.route('/<string:id>', methods=['PATCH'])
+@validate()
+def patch_users(id, body: UserUpdateSchema):
+    user = user_repository.find_by_id(id)
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if body.name:
+        user.name = body.name
+    if body.email:
+        user.email = body.email
+
+    user_repository.session.commit()
+    updated_profile = {
+        "id": str(user.id),
+        "name": user.name,
+        "email": user.email,
+        "created_at": user.created_at.isoformat(),
+        "updated_at": user.updated_at.isoformat(),
+    }
+    return jsonify(updated_profile)
