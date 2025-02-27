@@ -10,21 +10,22 @@ from service.schema.user_schema import UserUpdateSchema
 user = blueprints.Blueprint('user', __name__, url_prefix='/users')
 user_repository = UserRepository(get_db_session())
 
+@user.route('/', methods=['GET'])
+def get_all_users():
+    response = user_repository.find_all()
+    if not response:
+        return jsonify({"error": "User not found"}), 404
+    
+    users_data = [user.to_dict() for user in response]
+    return jsonify(users_data)
+
 @user.route('/<string:id>', methods=['GET'])
 def get_users(id):
     response = user_repository.find_by_id(id)
     if not response:
         return jsonify({"error": "User not found"}), 404
     
-    user_data = {
-        "id": str(response.id),
-        "name": response.name,
-        "email": response.email,
-        "created_at": response.created_at.isoformat(),
-        "updated_at": response.updated_at.isoformat(),
-    }
-
-    return jsonify(user_data)
+    return jsonify(response.to_dict())
 
 @user.route('/<string:id>', methods=['PATCH'])
 @validate()
@@ -39,11 +40,4 @@ def patch_users(id, body: UserUpdateSchema):
         user.email = body.email
 
     user_repository.session.commit()
-    updated_profile = {
-        "id": str(user.id),
-        "name": user.name,
-        "email": user.email,
-        "created_at": user.created_at.isoformat(),
-        "updated_at": user.updated_at.isoformat(),
-    }
-    return jsonify(updated_profile)
+    return jsonify(user.to_dict())
