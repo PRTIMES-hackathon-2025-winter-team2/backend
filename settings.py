@@ -6,6 +6,8 @@ from flask_cors import CORS
 from sqlalchemy.engine.create import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
+from datetime import timedelta
+from flask_jwt_extended import JWTManager
 
 
 """
@@ -17,6 +19,13 @@ CORS(app)
 app.config['JSON_SORT_KEYS'] = False
 app.config['JSON_AS_ASCII'] = False
 app.config['ENABLE_AUTH'] = True
+
+app.config['JWT_SECRET_KEY'] = "secret_key"
+app.config['JWT_ALGORITHM'] = 'HS256'
+app.config['JWT_LEEWAY'] = 0
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=300)
+app.config['JWT_NOT_BEFORE_DELTA'] = timedelta(seconds=0)
+
 
 """
 データベースの設定
@@ -35,6 +44,8 @@ password = os.environ.get("POSTGRES_PASSWORD")
 host = os.environ.get("POSTGRES_HOST")
 port = os.environ.get("POSTGRES_PORT")
 db_name = os.environ.get("POSTGRES_DB")
+
+jwt = JWTManager(app)
 
 url: str = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'
 
