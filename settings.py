@@ -28,6 +28,8 @@ app.config["JWT_NOT_BEFORE_DELTA"] = timedelta(seconds=0)
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 app.config["JWT_CSRF_CHECK_FORM"] = False
+app.config["JWT_COOKIE_SECURE"] = True
+app.config["JWT_COOKIE_SAMESITE"] = "None"
 
 CORS(
     app,
