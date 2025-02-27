@@ -1,0 +1,40 @@
+@baseUrl = http://localhost:5000
+@contentType = application/json
+
+### ユーザー登録
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+    "email": "test@example.com",
+    "password": "password123",
+    "name": "testuser"
+}
+
+### ログイン
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+    "email": "test@example.com",
+    "password": "password123"
+}
+
+### トークンを環境変数として保存
+@authToken = {{login.response.body.token}}
+
+### ツリー作成
+POST {{baseUrl}}/trees/{{userId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+    "title": "My First Dream Tree",
+    "dreams": [
+        {
+            "title": "Learn Programming",
+            "position": 1
+        }
+    ]
+}

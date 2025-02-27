@@ -25,6 +25,9 @@ components:
         token:
           type: string
           description: JWTトークン
+        id:
+          type: string
+          description: ユーザID
 
 paths:
   /auth/register:
