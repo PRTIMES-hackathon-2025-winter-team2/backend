@@ -544,26 +544,60 @@ paths:
                     id: "987fcdeb-54ba-4321-8765-098765432100"
                     name: "鈴木花子"
 
-  /follow/<user_id>:
+  /follow/{user_id}:
     post:
       security:
         - bearerAuth: []
       tags:
         - follow
       summary: ユーザをフォローする
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         201:
           description: Follow created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from_user_id:
+                    type: string
+                    example: eddef7ec-6392-4161-b361-1c555332107a
+                  to_user_id:
+                    type: string
+                    example: 123e4567-e89b-12d3-a456-426614174000
     delete:
       security:
         - bearerAuth: []
       tags:
         - follow
       summary: ユーザのフォローを解除する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         200:
           description: Follow deleted successfully
-
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from_user_id:
+                    type: string
+                    example: eddef7ec-6392-4161-b361-1c555332107a
+                  to_user_id:
+                    type: string
+                    example: 123e4567-e89b-12d3-a456-426614174000
+                    
   /follow/{user_id}/followers:
     get:
       tags:
