@@ -1,15 +1,13 @@
 from flask import blueprints, request, jsonify
-from flask_pydantic import validate
-from service.schema.auth_schema import UserRegisterSchema, UserLoginSchema, TokenResponseSchema
 from service.auth_service import AuthService
+from service.follow_service import FollowService
 from repository.user_repository import UserRepository
 from repository.follow_repository import FollowRepository
 from settings import get_db_session
 
-
 follow = blueprints.Blueprint('follow', __name__, url_prefix='/follow')
-user_repository = UserRepository(get_db_session())
 follow_repository = FollowRepository(get_db_session())
+follow_service = FollowService(follow_repository)
 
 def get_user_id_from_token():
     auth_header = request.headers.get('Authorization')
@@ -25,12 +23,8 @@ def post_follow(user_id):
     if not from_user_id:
         return jsonify({"error": "Invalid token"}), 401
 
-    existing_follow = follow_repository.find_by_ids(from_user_id=from_user_id, to_user_id=user_id)
-    if existing_follow:
-        return jsonify({"error": "Already following"}), 400
-
-    follow = follow_repository.create(from_user_id=from_user_id, to_user_id=user_id)
-    return jsonify({"from_user_id": follow.from_user_id, "to_user_id": follow.to_user_id}), 201
+    response, status = follow_service.follow_user(from_user_id, user_id)
+    return jsonify(response), status
 
 @follow.route('/<string:user_id>', methods=['DELETE'])
 def delete_follow(user_id):
@@ -38,21 +32,15 @@ def delete_follow(user_id):
     if not from_user_id:
         return jsonify({"error": "Invalid token"}), 401
 
-    follow = follow_repository.find_by_ids(from_user_id=from_user_id, to_user_id=user_id)
-    if not follow:
-        return jsonify({"error": "Follow relationship not found"}), 404
-
-    follow_repository.delete(follow)
-    return jsonify({"from_user_id": from_user_id, "to_user_id": user_id}), 200
+    response, status = follow_service.unfollow_user(from_user_id, user_id)
+    return jsonify(response), status
 
 @follow.route('/<string:user_id>/followers', methods=['GET'])
 def get_followers(user_id):
-    followers = follow_repository.get_followers_by_user_id(user_id)
-    followers_data = [{"id": follower.id, "name": follower.name} for follower in followers]
-    return jsonify(followers_data), 200
+    response, status = follow_service.get_followers(user_id)
+    return jsonify(response), status
 
 @follow.route('/<string:user_id>/following', methods=['GET'])
 def get_following(user_id):
-    followers = follow_repository.get_following_by_user_id(user_id)
-    followers_data = [{"id": follower.id, "name": follower.name} for follower in followers]
-    return jsonify(followers_data), 200
+    response, status = follow_service.get_following(user_id)
+    return jsonify(response), status
