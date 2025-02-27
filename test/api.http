@@ -1,9 +1,8 @@
 @baseUrl = http://localhost:5000
 @contentType = application/json
 
-@userId = bba4eb2e-25bc-4e6a-8cd9-e20571d2afd1
-
 ### ユーザー登録
+# @name register
 POST {{baseUrl}}/auth/register
 Content-Type: {{contentType}}
 
@@ -12,6 +11,9 @@ Content-Type: {{contentType}}
     "password": "password123",
     "name": "testuser"
 }
+
+### ユーザIDを環境変数として保存
+@userId = {{register.response.body.user_id}}
 
 ### ログイン
 # @name login
@@ -26,26 +28,64 @@ Content-Type: {{contentType}}
 ### トークンを環境変数として保存
 @authToken = {{login.response.body.token}}
 
-### ツリー作成
-POST {{baseUrl}}/trees/{{userId}}
-Authorization: Bearer {{authToken}}
-Content-Type: {{contentType}}
-
-{
-    "title": "My First Dream Tree",
-    "dreams": [
-        {
-            "title": "Learn Programming",
-            "position": 1
-        }
-    ]
-}
 
 ### ユーザプロフィールの取得
 GET {{baseUrl}}/users/{{userId}}
 Authorization: Bearer {{authToken}}
 Content-Type: {{contentType}}
 
+### 全ユーザーの取得
+GET {{baseUrl}}/trees
+Content-Type: {{contentType}}
+
+
+### ユーザーの全ツリー取得
+GET {{baseUrl}}/users/{{userId}}/trees
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+### 新しいツリーを作成
+# @name createTree
+POST {{baseUrl}}/users/{{userId}}/trees
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+    "title": "プログラミングの夢",
+    "dreams": [
+        {
+            "title": "プログラミングを学ぶ",
+            "position": 1
+        },
+        {
+            "title": "プログラミングを極める",
+            "position": 2
+        }
+    ]
+}
+
+### ツリーIDを環境変数として保存
+@treeId = {{createTree.response.body.id}}
+
+### 特定のツリーの詳細を取得
+GET {{baseUrl}}/users/{{userId}}/trees/{{treeId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+### ツリーの情報を更新
+PATCH {{baseUrl}}/users/{{userId}}/trees/{{treeId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+    "name": "Updated Programming Dream",
+    "ended_at": "2024-12-31T23:59:59Z"
+}
+
+### ツリーを削除
+DELETE {{baseUrl}}/users/{{userId}}/trees/{{treeId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
 
 ### ユーザプロフィールの更新
 PATCH {{baseUrl}}/users/{{userId}}
@@ -57,8 +97,8 @@ Content-Type: {{contentType}}
     "name": "updateduser"
 }
 
-
 ### すべてのユーザプロフィールのリストを取得
 GET {{baseUrl}}/users
 Authorization: Bearer {{authToken}}
 Content-Type: {{contentType}}
+
