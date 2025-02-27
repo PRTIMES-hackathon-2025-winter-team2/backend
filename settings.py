@@ -21,7 +21,7 @@ app.config['JSON_SORT_KEYS'] = False
 app.config['JSON_AS_ASCII'] = False
 app.config['ENABLE_AUTH'] = True
 
-app.config['JWT_SECRET_KEY'] = os.environ.get("JWT_SECRET_KEY")
+app.config['JWT_SECRET_KEY'] = os.environ.get("JWT_SECRET_KEY", "sceret")
 app.config['JWT_ALGORITHM'] = 'HS256'
 app.config['JWT_LEEWAY'] = 0
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=60 * 60 * 24 * 30)
@@ -38,11 +38,11 @@ jwt = JWTManager(app)
 データベースの設定
 """
 
-user = os.environ.get("POSTGRES_USER")
-password = os.environ.get("POSTGRES_PASSWORD")
-host = os.environ.get("POSTGRES_HOST")
-port = os.environ.get("POSTGRES_PORT")
-db_name = os.environ.get("POSTGRES_DB")
+user = os.environ.get("POSTGRES_USER", "postgres")
+password = os.environ.get("POSTGRES_PASSWORD", "postgres")
+host = os.environ.get("POSTGRES_HOST", "database")
+port = os.environ.get("POSTGRES_PORT", "5432")
+db_name = os.environ.get("POSTGRES_DB", "database")
 
 url: str = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'
 
