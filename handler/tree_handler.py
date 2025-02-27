@@ -6,7 +6,7 @@ from service.tree_service import TreeService
 from settings import get_db_session
 from service.schema.tree_schema import PostTreeRequestSchema, PatchTreeRequestSchema
 from settings import app
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 user_tree_blueprint = blueprints.Blueprint('user_tree', __name__, url_prefix='/users/<string:user_id>/trees')
 tree_blueprint = blueprints.Blueprint('tree', __name__, url_prefix='/trees')
@@ -24,6 +24,7 @@ def get_all_user_trees(user_id):
 
 @user_tree_blueprint.route('/', methods=['POST'])
 @validate()
+@jwt_required()
 def post_user_trees(user_id, body: PostTreeRequestSchema):
     app.logger.info(f"user_id: {get_jwt_identity()}")
     saved_tree = tree_service.create_tree(user_id, body)

@@ -27,7 +27,9 @@ app.config['JWT_ALGORITHM'] = 'HS256'
 app.config['JWT_LEEWAY'] = 0
 app.config['JWT_EXPIRATION_DELTA'] = timedelta(seconds=300)
 app.config['JWT_NOT_BEFORE_DELTA'] = timedelta(seconds=0)
-
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False
+app.config['JWT_CSRF_CHECK_FORM'] = False
 
 """
 データベースの設定
