@@ -4,6 +4,7 @@ from service.schema.auth_schema import UserRegisterSchema, UserLoginSchema, Toke
 from service.auth_service import AuthService
 from repository.user_repository import UserRepository
 from settings import get_db_session
+from flask_jwt_extended import set_access_cookies
 
 auth = blueprints.Blueprint('auth', __name__, url_prefix='/auth')
 user_repository = UserRepository(get_db_session())
@@ -12,14 +13,18 @@ auth_service = AuthService(user_repository, 'secret_key')
 @auth.route('/register', methods=['POST'])
 @validate()
 def register(body: UserRegisterSchema):
-    response = auth_service.register(body)
-    return jsonify(response.model_dump())
+    r = auth_service.register(body)
+    response = jsonify(r.model_dump())
+    set_access_cookies(response, r.token)
+    return response
 
 @auth.route('/login', methods=['POST'])
 @validate()
 def login(body: UserLoginSchema):
-    response = auth_service.login(body)
-    return jsonify(response.model_dump())
+    r = auth_service.login(body)
+    response = jsonify(r.model_dump())
+    set_access_cookies(response, r.token)
+    return response
 
 @auth.route('/reset_password', methods=['POST'])
 def reset_password():
