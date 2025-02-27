@@ -39,7 +39,7 @@ db_name = os.environ.get("POSTGRES_DB")
 url: str = f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'
 
 # engineの設定
-engine = create_engine(url=url, pool_recycle=10, echo=True)
+engine = create_engine(url=url, pool_recycle=10, echo=False)
 
 session = scoped_session(
     sessionmaker(
