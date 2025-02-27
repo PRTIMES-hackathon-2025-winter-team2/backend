@@ -31,12 +31,12 @@ components:
         token:
           type: string
           description: JWTトークン
-        id:
+        user_id:
           type: string
           description: ユーザID
       example:
         token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IuWxseeUsOWkqumDjiJ9"
-        id: "123e4567-e89b-12d3-a456-426614174000"
+        user_id: "123e4567-e89b-12d3-a456-426614174000"
 
 paths:
   /auth/register:
@@ -51,15 +51,15 @@ paths:
             schema:
               type: object
               properties:
+                username:
+                  type: string
+                  example: "山田太郎"
                 email:
                   type: string
                   example: "user@example.com"
                 password:
                   type: string
                   example: "password123"
-                username:
-                  type: string
-                  example: "山田太郎"
       responses:
         201:
           description: User registered successfully
