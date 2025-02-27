@@ -5,14 +5,15 @@ from service.auth_service import AuthService
 from repository.user_repository import UserRepository
 from settings import get_db_session
 from service.schema.user_schema import UserUpdateSchema
-
+from service.user_service import UserService
 
 user = blueprints.Blueprint('user', __name__, url_prefix='/users')
 user_repository = UserRepository(get_db_session())
+user_service = UserService(user_repository)
 
 @user.route('/', methods=['GET'])
 def get_all_users():
-    response = user_repository.find_all()
+    response = user_service.get_all_users()
     if not response:
         return jsonify({"error": "User not found"}), 404
     
@@ -21,7 +22,7 @@ def get_all_users():
 
 @user.route('/<string:user_id>', methods=['GET'])
 def get_users(user_id):
-    response = user_repository.find_by_id(user_id)
+    response = user_service.get_user_by_id(user_id)
     if not response:
         return jsonify({"error": "User not found"}), 404
     
@@ -34,17 +35,9 @@ def get_users(user_id):
 @user.route('/<string:user_id>', methods=['PATCH'])
 @validate()
 def patch_users(user_id, body: UserUpdateSchema):
-    user = user_repository.find_by_id(user_id)
+    user_data = body.dict(exclude_unset=True)
+    user = user_service.update_user(user_id, user_data)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    user_data = {}
-    if body.name:
-        user.name = body.name
-        user_data["name"] = user.name 
-    if body.email:
-        user.email = body.email
-        user_data["email"] = user.email
-
-    user_repository.session.commit()
-    return jsonify(user_data)
+    return jsonify({"id": user.id, "name": user.name, "email": user.email})
