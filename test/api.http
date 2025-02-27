@@ -29,6 +29,7 @@ Content-Type: {{contentType}}
 
 ### トークンを環境変数として保存
 @authToken = {{login.response.body.token}}
+@userId = {{login.response.body.user_id}}
 
 
 ### ユーザプロフィールの取得
