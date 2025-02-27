@@ -3,6 +3,7 @@ from sqlalchemy.orm import scoped_session
 from domain.tree import Tree
 from datetime import datetime
 
+
 class TreeRepository:
     def __init__(self, session: scoped_session):
         self.session = session
@@ -14,10 +15,12 @@ class TreeRepository:
         return self.session.query(Tree).filter(Tree.id == tree_id).first()
 
     def get_all_users_trees(self) -> Optional[list[Tree]]:
-        return (self.session.query(Tree)
+        return (
+            self.session.query(Tree)
             .distinct(Tree.user_id)
             .order_by(Tree.user_id, Tree.created_at.desc())
-            .all())
+            .all()
+        )
 
     def update_tree(self, tree: Tree) -> Tree:
         self.session.commit()
@@ -32,5 +35,3 @@ class TreeRepository:
         self.session.add(tree)
         self.session.commit()
         return tree
-
-

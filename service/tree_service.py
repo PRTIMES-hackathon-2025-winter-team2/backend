@@ -2,10 +2,22 @@ from domain.tree import Tree
 from domain.dream import Dream
 from repository.tree_repository import TreeRepository
 from repository.dream_repository import DreamRepository
-from service.schema.tree_schema import GetTreesResponseSchema, PostTreeRequestSchema, PostTreeResponseSchema, GetTreeResponseSchema, PatchTreeRequestSchema, TreeBase, GetAllUsersTreesResponseSchema, TreeSchemaWithUserID
+from service.schema.tree_schema import (
+    GetTreesResponseSchema,
+    PostTreeRequestSchema,
+    PostTreeResponseSchema,
+    GetTreeResponseSchema,
+    PatchTreeRequestSchema,
+    TreeBase,
+    GetAllUsersTreesResponseSchema,
+    TreeSchemaWithUserID,
+)
+
 
 class TreeService:
-    def __init__(self, tree_repository: TreeRepository, dream_repository: DreamRepository):
+    def __init__(
+        self, tree_repository: TreeRepository, dream_repository: DreamRepository
+    ):
         self.dream_repository = dream_repository
         self.tree_repository = tree_repository
 
@@ -13,7 +25,10 @@ class TreeService:
         trees = self.tree_repository.get_all_users_trees()
         if not trees:
             raise ValueError("Trees not found")
-        trees = [TreeSchemaWithUserID(id=tree.id, title=tree.title, user_id=tree.user_id) for tree in trees]
+        trees = [
+            TreeSchemaWithUserID(id=tree.id, title=tree.title, user_id=tree.user_id)
+            for tree in trees
+        ]
 
         return GetAllUsersTreesResponseSchema(trees=trees)
 
@@ -31,17 +46,21 @@ class TreeService:
             raise ValueError(f"Tree not found for tree_id: {tree_id}")
         dreams = []
         for dream in tree.dreams:
-            dreams.append({
-                "id": dream.id,
-                "title": dream.title,
-                "position": dream.position,
-                "created_at": dream.created_at,
-                "ended_at": dream.ended_at
-            })
+            dreams.append(
+                {
+                    "id": dream.id,
+                    "title": dream.title,
+                    "position": dream.position,
+                    "created_at": dream.created_at,
+                    "ended_at": dream.ended_at,
+                }
+            )
 
         return GetTreeResponseSchema(id=tree.id, title=tree.title, dreams=dreams)
 
-    def create_tree(self, user_id: str, body: PostTreeRequestSchema) -> PostTreeResponseSchema:
+    def create_tree(
+        self, user_id: str, body: PostTreeRequestSchema
+    ) -> PostTreeResponseSchema:
         tree = Tree(user_id=user_id, title=body.title)
         tree = self.tree_repository.create(tree)
         dreams = [

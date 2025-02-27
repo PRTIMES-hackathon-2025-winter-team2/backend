@@ -7,7 +7,7 @@ from handler.follow_handler import follow_blueprint
 from handler.dream_handler import user_tree_dream_blueprint
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     create_tables()
 
     app.register_blueprint(auth_blueprint)

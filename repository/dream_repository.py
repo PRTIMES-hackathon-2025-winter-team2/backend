@@ -2,6 +2,7 @@ from sqlalchemy.orm import scoped_session
 from domain.dream import Dream
 from datetime import datetime
 
+
 class DreamRepository:
     def __init__(self, session: scoped_session):
         self.session = session
