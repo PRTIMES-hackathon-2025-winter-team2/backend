@@ -1,6 +1,8 @@
 @baseUrl = http://localhost:5000
 @contentType = application/json
 
+@userId = bba4eb2e-25bc-4e6a-8cd9-e20571d2afd1
+
 ### ユーザー登録
 POST {{baseUrl}}/auth/register
 Content-Type: {{contentType}}
@@ -38,3 +40,25 @@ Content-Type: {{contentType}}
         }
     ]
 }
+
+### ユーザプロフィールの取得
+GET {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+
+### ユーザプロフィールの更新
+PATCH {{baseUrl}}/users/{{userId}}
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
+
+{
+    "email": "updated@example.com",
+    "name": "updateduser"
+}
+
+
+### すべてのユーザプロフィールのリストを取得
+GET {{baseUrl}}/users
+Authorization: Bearer {{authToken}}
+Content-Type: {{contentType}}
