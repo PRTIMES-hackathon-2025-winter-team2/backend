@@ -1,4 +1,4 @@
-from flask import blueprints, jsonify
+from flask import blueprints, jsonify, request, make_response
 from flask_pydantic import validate
 from repository.tree_repository import TreeRepository
 from repository.dream_repository import DreamRepository
@@ -6,7 +6,7 @@ from service.tree_service import TreeService
 from settings import get_db_session
 from service.schema.tree_schema import PostTreeRequestSchema, PatchTreeRequestSchema
 from settings import app
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import get_jwt_identity
 
 user_tree_blueprint = blueprints.Blueprint('user_tree', __name__, url_prefix='/users/<string:user_id>/trees')
 tree_blueprint = blueprints.Blueprint('tree', __name__, url_prefix='/trees')
@@ -23,7 +23,6 @@ def get_all_user_trees(user_id):
     return jsonify(response.model_dump())
 
 @user_tree_blueprint.route('/', methods=['POST'])
-@jwt_required()
 @validate()
 def post_user_trees(user_id, body: PostTreeRequestSchema):
     app.logger.info(f"user_id: {get_jwt_identity()}")
