@@ -131,8 +131,10 @@ paths:
                 properties:
                   id:
                     type: string
+                    example: 2539df44-a215-4979-827c-7312e99391fa
                   name:
                     type: string
+                    example: testuser
     patch:
       security:
         - bearerAuth: []
@@ -154,11 +156,24 @@ paths:
               properties:
                 email:
                   type: string
+                  example: updated@example.com
                 name:
                   type: string
+                  example: updateduser
       responses:
         200:
           description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: updated@example.com
+                  name:
+                    type: string
+                    example: updateuser
 
   /trees:
     get:
@@ -512,22 +527,22 @@ paths:
                 items:
                   type: object
                   properties:
+                    email:
+                      type: string
+                      example: "yamada@example.com"
                     id:
                       type: string
                       example: "123e4567-e89b-12d3-a456-426614174000"
                     name:
                       type: string
                       example: "山田太郎"
-                    email:
-                      type: string
-                      example: "yamada@example.com"
                 example:
-                  - id: "123e4567-e89b-12d3-a456-426614174000"
+                  - email: "yamada@example.com"
+                    id: "123e4567-e89b-12d3-a456-426614174000"
                     name: "山田太郎"
-                    email: "yamada@example.com"
-                  - id: "987fcdeb-54ba-4321-8765-098765432100"
+                  - email: "suzuki@example.com"
+                    id: "987fcdeb-54ba-4321-8765-098765432100"
                     name: "鈴木花子"
-                    email: "suzuki@example.com"
 
   /follow/<user_id>:
     post:
