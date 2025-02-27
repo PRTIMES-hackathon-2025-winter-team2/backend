@@ -7,10 +7,16 @@ tags:
     description: User authentication
   - name: tree
     description: User tree management
+  - name: dreams
+    description: User dream management
   - name: user
     description: User profile management
   - name: follow
     description: User follow management
+
+servers: # base endpoint
+  - url: http://localhost:5000/api/v1
+    description: base endpoint.
 
 components:
   securitySchemes:
@@ -28,6 +34,9 @@ components:
         id:
           type: string
           description: ユーザID
+      example:
+        token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IuWxseeUsOWkqumDjiJ9"
+        id: "123e4567-e89b-12d3-a456-426614174000"
 
 paths:
   /auth/register:
@@ -44,10 +53,13 @@ paths:
               properties:
                 email:
                   type: string
+                  example: "user@example.com"
                 password:
                   type: string
+                  example: "password123"
                 username:
                   type: string
+                  example: "山田太郎"
       responses:
         201:
           description: User registered successfully
@@ -98,225 +110,13 @@ paths:
         200:
           description: Password reset link sent successfully
 
-  /trees/{user_id}:
-    get:
-      tags:
-        - tree
-      summary: ユーザが作成したツリーのリストを取得する
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: List of user's trees retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    title:
-                      type: string
-                    created_at:
-                      type: string
-                    ended_at:
-                      type: string
-
-    post:
-      security:
-        - bearerAuth: []
-      tags:
-        - tree
-      summary: ユーザが新しいツリーを作成する
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                dreams:
-                  type: array
-                  items:
-                    properties:
-                      id:
-                        type: string
-                      tree_id:
-                        type: string
-                      position:
-                        type: integer
-                      title:
-                        type: string
-                      created_at:
-                        type: string
-                      ended_at:
-                        type: string
-      responses:
-        201:
-          description: New tree created successfully
-
-  /trees/{user_id}/{id}:
-    get:
-      tags:
-        - tree
-      summary: ユーザが作成した特定のツリーの詳細を取得する
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Tree details retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  title:
-                    type: string
-                  created_at:
-                    type: string
-                  ended_at:
-                    type: string
-                  dreams:
-                    type: array
-                    items:
-                      properties:
-                        id:
-                          type: string
-                        tree_id:
-                          type: string
-                        position:
-                          type: integer
-                        title:
-                          type: string
-                        created_at:
-                          type: string
-                        ended_at:
-                          type: string
-
-    patch:
-      security:
-        - bearerAuth: []
-      tags:
-        - tree
-      summary: ユーザが作成したツリーのステータスを更新する
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                dreams:
-                  type: array
-                  items:
-                    properties:
-                      id:
-                        type: string
-                      tree_id:
-                        type: string
-                      position:
-                        type: integer
-                      title:
-                        type: string
-                      created_at:
-                        type: string
-                      ended_at:
-                        type: string
-      responses:
-        200:
-          description: Tree status updated successfully
-    delete:
-      security:
-        - bearerAuth: []
-      tags:
-        - tree
-      summary: ユーザが作成した特定のツリーを削除する
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Tree deleted successfully
-
-  /trees:
-    get:
-      tags:
-        - tree
-      summary: 全ユーザが作成したすべてのツリーのリストを取得する
-      responses:
-        200:
-          description: List of all trees retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    username:
-                      type: string
-                    title:
-                      type: string
-                    created_at:
-                      type: string
-                    ended_at:
-                      type: string
-
-  /users/{id}:
+  /users/{user_id}:
     get:
       tags:
         - user
       summary: ユーザプロフィールの詳細を取得する
       parameters:
-        - name: id
+        - name: user_id
           in: path
           required: true
           schema:
@@ -340,7 +140,7 @@ paths:
         - user
       summary: ユーザプロフィール情報を更新する
       parameters:
-        - name: id
+        - name: user_id
           in: path
           required: true
           schema:
@@ -360,6 +160,310 @@ paths:
         200:
           description: User profile updated successfully
 
+  /users/{user_id}/trees:
+    get:
+      tags:
+        - tree
+      summary: ユーザのすべての木のリストを取得する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of all trees retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "123e4567-e89b-12d3-a456-426614174000"
+                    name:
+                      type: string
+                      example: "プログラミングの夢"
+                example:
+                  - id: "123e4567-e89b-12d3-a456-426614174000"
+                    name: "プログラミングの夢"
+                  - id: "987fcdeb-54ba-4321-8765-098765432100"
+                    name: "起業への道"
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - tree
+      summary: ユーザの新しい木を作成する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        201:
+          description: Tree created successfully
+
+  /users/{user_id}/trees/{tree_id}:
+    get:
+      tags:
+        - tree
+      summary: ユーザの木の詳細を取得する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tree_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Tree retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "123e4567-e89b-12d3-a456-426614174000"
+                  name:
+                    type: string
+                    example: "プログラミングの夢"
+                  dreams:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "456e7890-12cd-34ef-a456-426614174000"
+                        title:
+                          type: string
+                          example: "Webアプリケーションを作る"
+                        position:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: "2024-01-01T00:00:00Z"
+                        ended_at:
+                          type: string
+                          example: "2024-12-31T23:59:59Z"
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - tree
+      summary: ユーザの木の情報を更新する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tree_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        200:
+          description: Tree updated successfully
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - tree
+      summary: ユーザの木を削除する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tree_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Tree deleted successfully
+
+  /users/{user_id}/trees/{tree_id}/dreams:
+    get:
+      tags:
+        - dreams
+      summary: ユーザの木のすべての夢のリストを取得する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tree_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: List of all dreams retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "456e7890-12cd-34ef-a456-426614174000"
+                    title:
+                      type: string
+                      example: "Webアプリケーションを作る"
+                    position:
+                      type: integer
+                      example: 1
+                    created_at:
+                      type: string
+                      example: "2024-01-01T00:00:00Z"
+                    ended_at:
+                      type: string
+                      example: "2024-12-31T23:59:59Z"
+                example:
+                  - id: "456e7890-12cd-34ef-a456-426614174000"
+                    title: "Webアプリケーションを作る"
+                    position: 1
+                    created_at: "2024-01-01T00:00:00Z"
+                    ended_at: "2024-12-31T23:59:59Z"
+                  - id: "789f1234-56gh-78ij-b901-234567890123"
+                    title: "スマートフォンアプリを作る"
+                    position: 2
+                    created_at: "2024-01-01T00:00:00Z"
+                    ended_at: "2024-12-31T23:59:59Z"
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - dreams
+      summary: ユーザの新しい夢を作成する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tree_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                position:
+                  type: integer
+      responses:
+        201:
+          description: Dream created successfully
+
+  /users/{user_id}/trees/{tree_id}/dreams/{dream_id}:
+    patch:
+      security:
+        - bearerAuth: []
+      tags:
+        - dreams
+      summary: ユーザの夢の情報を更新する
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tree_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: dream_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "新しい夢のタイトル"
+                position:
+                  type: integer
+                  example: 3
+                ended_at:
+                  type: string
+                  example: "2024-12-31T23:59:59Z"
+      responses:
+        200:
+          description: Dream updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: "456e7890-12cd-34ef-a456-426614174000"
+                  title:
+                    type: string
+                    example: "新しい夢のタイトル"
+                  position:
+                    type: integer
+                    example: 3
+                  created_at:
+                    type: string
+                    example: "2024-01-01T00:00:00Z"
+                  ended_at:
+                    type: string
+                    example: "2024-12-31T23:59:59Z"
+
   /users:
     get:
       tags:
@@ -368,55 +472,52 @@ paths:
       responses:
         200:
           description: List of all user profiles retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "123e4567-e89b-12d3-a456-426614174000"
+                    name:
+                      type: string
+                      example: "山田太郎"
+                    email:
+                      type: string
+                      example: "yamada@example.com"
+                example:
+                  - id: "123e4567-e89b-12d3-a456-426614174000"
+                    name: "山田太郎"
+                    email: "yamada@example.com"
+                  - id: "987fcdeb-54ba-4321-8765-098765432100"
+                    name: "鈴木花子"
+                    email: "suzuki@example.com"
 
-  /follow:
+  /follow/<user_id>:
     post:
       security:
         - bearerAuth: []
       tags:
         - follow
       summary: ユーザをフォローする
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                from_user_id:
-                  type: string
-                to_user_id:
-                  type: string
       responses:
         201:
           description: Follow created successfully
-
-  /unfollow:
-    post:
+    delete:
       security:
         - bearerAuth: []
       tags:
         - follow
       summary: ユーザのフォローを解除する
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                from_user_id:
-                  type: string
-                to_user_id:
-                  type: string
       responses:
         200:
-          description: Unfollowed successfully
+          description: Follow deleted successfully
 
-  /followers/{user_id}:
+  /follow/{user_id}/followers:
     get:
-      security:
-        - bearerAuth: []
       tags:
         - follow
       summary: ユーザのことをフォローしているユーザのリストを取得する
@@ -438,13 +539,18 @@ paths:
                   properties:
                     id:
                       type: string
+                      example: "123e4567-e89b-12d3-a456-426614174000"
                     name:
                       type: string
+                      example: "田中次郎"
+                example:
+                  - id: "123e4567-e89b-12d3-a456-426614174000"
+                    name: "田中次郎"
+                  - id: "987fcdeb-54ba-4321-8765-098765432100"
+                    name: "佐藤花子"
 
-  /following/{user_id}:
+  /follow/{user_id}/following:
     get:
-      security:
-        - bearerAuth: []
       tags:
         - follow
       summary: ユーザがフォローしているユーザのリストを取得する
@@ -466,5 +572,12 @@ paths:
                   properties:
                     id:
                       type: string
+                      example: "123e4567-e89b-12d3-a456-426614174000"
                     name:
                       type: string
+                      example: "佐藤次郎"
+                example:
+                  - id: "123e4567-e89b-12d3-a456-426614174000"
+                    name: "佐藤次郎"
+                  - id: "987fcdeb-54ba-4321-8765-098765432100"
+                    name: "田中花子"
