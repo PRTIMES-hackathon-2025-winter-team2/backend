@@ -35,8 +35,7 @@ def get_users(user_id):
 @user.route('/<string:user_id>', methods=['PATCH'])
 @validate()
 def patch_users(user_id, body: UserUpdateSchema):
-    user_data = body.dict(exclude_unset=True)
-    user = user_service.update_user(user_id, user_data)
+    user = user_service.update_user(user_id, body)
     if not user:
         return jsonify({"error": "User not found"}), 404
 
