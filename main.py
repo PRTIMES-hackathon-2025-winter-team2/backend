@@ -1,20 +1,20 @@
 from settings import app
 from domain.tables import create_tables
-from handler.auth_handler import auth
-from handler.user_handler import user
+from handler.auth_handler import auth_blueprint
+from handler.user_handler import user_blueprint
 from handler.tree_handler import user_tree_blueprint, tree_blueprint
-from handler.follow_handler import follow
+from handler.follow_handler import follow_blueprint
 from handler.dream_handler import user_tree_dream_blueprint
 
 
 if __name__ == '__main__':
     create_tables()
 
-    app.register_blueprint(auth)
-    app.register_blueprint(user)
+    app.register_blueprint(auth_blueprint)
+    app.register_blueprint(user_blueprint)
     app.register_blueprint(user_tree_blueprint)
     app.register_blueprint(tree_blueprint)
-    app.register_blueprint(follow)
+    app.register_blueprint(follow_blueprint)
     app.register_blueprint(user_tree_dream_blueprint)
 
     app.run(debug=True, host="0.0.0.0", port=5000)
