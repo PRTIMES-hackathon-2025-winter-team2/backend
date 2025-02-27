@@ -14,6 +14,9 @@ class UserRepository:
     def find_by_id(self, id: str) -> Optional[User]:
         return self.session.query(User).filter(User.id == id).first()
 
+    def find_all(self) -> list[User]:
+        return self.session.query(User).all()
+
     def compare_password(self, email: str, password: str) -> bool:
         user = self.find_by_email(email)
         if user is None:

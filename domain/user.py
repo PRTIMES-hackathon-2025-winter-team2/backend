@@ -25,3 +25,13 @@ class User(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime)
 
     trees: Mapped[list[Tree]] = relationship('Tree', backref='user')
+    
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "name": self.name,
+            "password": self.password,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+        }
