@@ -31,7 +31,9 @@ app.config["JWT_CSRF_CHECK_FORM"] = False
 
 CORS(
     app,
-    resources={"*": {"origins": "http://localhost:3000"}},
+    resources={
+        "*": {"origins": ["http://localhost:3000", "https://dreamtree.pages.dev"]}
+    },
     supports_credentials=True,
 )
 jwt = JWTManager(app)
