@@ -28,3 +28,9 @@ class DreamRepository:
             raise Exception(f"指定されたIDのDreamが存在しません: {dream_id}")
         dream.ended_at = datetime.now()
         self.session.commit()
+
+    def get_dream(self, dream_id: str) -> Dream:
+        dream = self.session.query(Dream).filter(Dream.id == dream_id).first()
+        if not dream:
+            raise Exception(f"指定されたIDのDreamが存在しません: {dream_id}")
+        return dream
