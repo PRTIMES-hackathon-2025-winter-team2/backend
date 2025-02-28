@@ -13,6 +13,12 @@ git rebase origin/main
 
 また、PR ではテンプレートを作成したので、それを埋める形で情報を記述して、お互いにレビューし合うことにします。
 
+### デプロイ
+
+フロントエンド : cloudflare pages
+バックエンド : render
+OGP 用サーバー: cloudflare workers
+
 ### モックサーバーの起動の仕方
 
 ```shell
