@@ -4,8 +4,7 @@ from flask_pydantic import validate
 
 from repository.dream_repository import DreamRepository
 from repository.tree_repository import TreeRepository
-from service.schema.tree_schema import (PatchTreeRequestSchema,
-                                        PostTreeRequestSchema)
+from service.schema.tree_schema import PatchTreeRequestSchema, PostTreeRequestSchema
 from service.tree_service import TreeService
 from settings import app, get_db_session
 

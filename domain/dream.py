@@ -25,5 +25,5 @@ class Dream(Base):
         UUID(as_uuid=True), ForeignKey("trees.id")
     )
     position: Mapped[int] = mapped_column(String(200))
-    created_at: Mapped[datetime] = mapped_column(DateTime)
-    ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
