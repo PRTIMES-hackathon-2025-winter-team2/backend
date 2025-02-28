@@ -25,7 +25,7 @@ class Tree(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.id")
     )
-    created_at: Mapped[datetime] = mapped_column(DateTime)
-    ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
+    ended_at: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
 
     dreams: Mapped[list[Dream]] = relationship("Dream", backref="tree")
