@@ -1,5 +1,5 @@
 from repository.dream_repository import DreamRepository
-from domain.dream import Dream
+from uuid import UUID
 
 
 class DreamService:
@@ -11,6 +11,6 @@ class DreamService:
         self.dream_repository.update_ended_at(dream_id)
         return None
 
-    def get_dream(self, dream_id: str) -> Dream:
-        """指定されたIDのDreamを取得する"""
-        return self.dream_repository.get_dream(dream_id)
+    def get_dream_owner(self, dream_id: str) -> UUID:
+        """指定されたIDのDreamのオーナーを取得する"""
+        return self.dream_repository.get_dream_owner(dream_id)

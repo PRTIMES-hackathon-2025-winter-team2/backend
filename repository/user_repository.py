@@ -4,7 +4,6 @@ import bcrypt
 from sqlalchemy.orm import scoped_session
 
 from domain.user import User
-from settings import app
 
 
 class UserRepository:
@@ -23,7 +22,6 @@ class UserRepository:
     def compare_password(self, email: str, password: str) -> bool:
         user = self.find_by_email(email)
         if user is None:
-            app.logger.error("User not found")
             return False
         return bcrypt.checkpw(password.encode("utf-8"), user.password.encode("utf-8"))
 

@@ -4,8 +4,11 @@ from flask_jwt_extended import create_access_token, decode_token
 
 from domain.user import User
 from repository.user_repository import UserRepository
-from service.schema.auth_schema import (TokenResponseSchema, UserLoginSchema,
-                                        UserRegisterSchema)
+from service.schema.auth_schema import (
+    TokenResponseSchema,
+    UserLoginSchema,
+    UserRegisterSchema,
+)
 
 
 class AuthService:
@@ -21,6 +24,10 @@ class AuthService:
             created_at=datetime.now(),
             updated_at=datetime.now(),
         )
+        current_user = self.user_repository.find_by_email(user.email)
+        if current_user is not None:
+            raise ValueError("User already exists")
+
         created_user = self.user_repository.create(user)
         return TokenResponseSchema(
             token=create_access_token(identity=str(created_user.id)),

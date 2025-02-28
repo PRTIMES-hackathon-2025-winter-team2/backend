@@ -17,9 +17,9 @@ dream_service = DreamService(DreamRepository(get_db_session()))
 @jwt_required()
 def update_ended_at(user_id: str, tree_id: str, dream_id: str):
     current_user_id = get_jwt_identity()
-    dream_user_id = dream_service.get_dream(dream_id).user_id
-    if current_user_id != dream_user_id:
-        return jsonify({"message": "Unauthorized"}), 403
+    dream_user_id = dream_service.get_dream_owner(dream_id)
+    if str(current_user_id) != str(dream_user_id):
+        return jsonify({"message": "Unauthorized"}), 401
     try:
         dream_service.update_ended_at(dream_id)
     except Exception as e:

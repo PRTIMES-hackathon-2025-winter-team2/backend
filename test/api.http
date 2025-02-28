@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:5000
+@baseUrl = https://backend-vf2n.onrender.com
 @contentType = application/json
 
 @followId = 4ba10488-13b6-407e-b950-2e35b9b07cd1

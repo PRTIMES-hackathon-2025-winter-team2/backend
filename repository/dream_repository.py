@@ -3,6 +3,9 @@ from datetime import datetime
 from sqlalchemy.orm import scoped_session
 
 from domain.dream import Dream
+from domain.tree import Tree
+from domain.user import User
+from uuid import UUID
 
 
 class DreamRepository:
@@ -29,8 +32,16 @@ class DreamRepository:
         dream.ended_at = datetime.now()
         self.session.commit()
 
-    def get_dream(self, dream_id: str) -> Dream:
-        dream = self.session.query(Dream).filter(Dream.id == dream_id).first()
-        if not dream:
+    def get_dream_owner(self, dream_id: str) -> UUID:
+        # userに紐付いたtreeに紐付いたdreamのIDからuserを取得する
+        result = (
+            self.session.query(User.id)  # User.idのみを選択
+            .join(Tree, User.id == Tree.user_id)
+            .join(Dream, Tree.id == Dream.tree_id)
+            .filter(Dream.id == dream_id)
+            .scalar()  # 単一の値を返す
+        )
+
+        if result is None:
             raise Exception(f"指定されたIDのDreamが存在しません: {dream_id}")
-        return dream
+        return result
